@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile PTK Minimalis - SMP Diponegoro Sampang</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #F8FAFF;
+        }
+        @keyframes zoom-in { 
+            from { transform: scale(0.95); opacity: 0; } 
+            to { transform: scale(1); opacity: 1; } 
+        }
+        .animate-zoom-in { animation: zoom-in 0.3s cubic-bezier(0.16, 1, 0.3, 1) both; }
+        .backdrop-blur-xl { backdrop-filter: blur(24px); }
+    </style>
+</head>
+<body class="min-h-screen text-slate-900">
+
+    <div id="app">
+        <!-- Login Screen -->
+        <div id="login-screen" class="min-h-screen flex items-center justify-center p-6">
+            <div class="w-full max-w-[380px] bg-white rounded-[3rem] shadow-xl p-10 border border-white">
+                <div class="flex flex-col items-center mb-10 text-center">
+                    <div class="w-16 h-16 bg-indigo-600 rounded-2xl flex items-center justify-center text-white shadow-lg mb-6">
+                        <i data-lucide="school" size="30"></i>
+                    </div>
+                    <h2 class="text-2xl font-black tracking-tighter">Admin Portal</h2>
+                </div>
+                <form id="login-form" class="space-y-4">
+                    <input type="text" id="username" placeholder="Username" required class="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl font-bold outline-none focus:ring-2 focus:ring-indigo-100 transition-all text-sm">
+                    <input type="password" id="password" placeholder="Password" required class="w-full px-6 py-4 bg-slate-50 border border-slate-100 rounded-2xl font-bold outline-none focus:ring-2 focus:ring-indigo-100 transition-all text-sm">
+                    <p id="login-error" class="text-rose-500 text-[10px] font-black text-center hidden">Kredensial salah.</p>
+                    <button type="submit" class="w-full py-4 bg-indigo-600 text-white rounded-2xl font-black uppercase tracking-[0.2em] text-[10px] hover:bg-indigo-700 transition-all shadow-lg active:scale-95">Masuk Sistem</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Main Dashboard (Hidden by default) -->
+        <div id="main-dashboard" class="hidden">
+            <header class="p-4 max-w-7xl mx-auto sticky top-0 z-40">
+                <div class="bg-white/80 backdrop-blur-xl rounded-[2rem] p-4 shadow-sm border border-white/50 flex items-center justify-between">
+                    <div class="flex items-center gap-4 px-2">
+                        <div class="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white shadow-md">
+                            <i data-lucide="school" size="20"></i>
+                        </div>
+                        <h1 class="text-sm font-black tracking-tight text-slate-900 hidden sm:block">SMP Diponegoro Sampang</h1>
+                    </div>
+                    <button onclick="logout()" class="px-4 py-2 text-rose-500 font-black text-[9px] uppercase tracking-widest hover:bg-rose-50 rounded-xl transition-all">
+                        Logout
+                    </button>
+                </div>
+            </header>
+
+            <main class="max-w-7xl mx-auto px-6 mt-12 pb-20">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-black tracking-tighter text-slate-900">Data <span class="text-indigo-600">Personil</span></h2>
+                    <p class="text-slate-400 font-bold text-sm mt-4">Sistem Manajemen Terpadu PTK</p>
+                </div>
+
+                <div class="flex flex-col md:flex-row gap-4 mb-12">
+                    <div class="flex p-1.5 bg-white rounded-2xl border border-slate-100 shadow-sm grow-0">
+                        <button onclick="switchTab('pendidik')" id="tab-pendidik" class="px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all bg-indigo-600 text-white">Guru</button>
+                        <button onclick="switchTab('tendik')" id="tab-tendik" class="px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all text-slate-400 hover:text-slate-600">Staf</button>
+                    </div>
+                    <div class="relative grow">
+                        <i data-lucide="search" class="absolute left-6 top-1/2 -translate-y-1/2 text-slate-300 w-5 h-5"></i>
+                        <input type="text" id="search-input" oninput="handleSearch()" placeholder="Cari personil..." class="w-full pl-14 pr-6 py-4 bg-white border border-slate-100 rounded-2xl font-bold outline-none shadow-sm focus:border-indigo-200 transition-all text-sm">
+                    </div>
+                </div>
+
+                <div id="person-grid" class="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+                    <!-- Cards injected here -->
+                </div>
+            </main>
+        </div>
+
+        <!-- Modal -->
+        <div id="modal-container" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4">
+            <div class="absolute inset-0 bg-slate-900/20 backdrop-blur-sm" onclick="closeModal()"></div>
+            <div id="modal-content" class="relative bg-white w-full max-w-[320px] rounded-[2rem] overflow-hidden shadow-2xl border border-slate-100 animate-zoom-in">
+                <!-- Content injected here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data PTK
+        const pendidikData = [
+            { id: 1, name: "Ali Sadikin", gender: "male", linkDrive1: "https://drive.google.com/file/d/15hYg-n9D3TNA2SPKQJ7Kzt_qNyiJDwAf/view?usp=drive_link", linkDrive2: "https://docs.google.com/spreadsheets/d/1PLDjxhdd_R8gjpQovB4PRICBh12m4M4U/edit?usp=drive_link" },
+            { id: 2, name: "Arief Kurniawan", gender: "male", linkDrive1: "https://drive.google.com/file/d/1uBpzQsQBt8I5G00AbQGOKYZrbZXb19Uv/view?usp=drive_link", linkDrive2: "https://docs.google.com/spreadsheets/d/1OgOaivkFoBprAXn_zLfYDPk6DnnFq4Ji/edit?usp=drive_link" },
+            { id: 3, name: "Atin Septiasari", gender: "female", linkDrive1: "https://drive.google.com/file/d/1-iv0dO_KuubNRn9tfy87oxkktjc7bw_W/view?usp=drive_link", linkDrive2: "https://docs.google.com/spreadsheets/d/1bUNmQHXfIeBb_2CTxp2c2jtytr46Y0aE/edit?usp=drive_link" },
+            { id: 4, name: "Fadlan Zulianto R", gender: "male", linkDrive1: "https://drive.google.com/file/d/1PscfKyXyhiRQy8HMBO8uQ2QehyaRH4Gb/view?usp=drive_link", linkDrive2: "https://docs.google.com/spreadsheets/d/1kzgk2vTQMic0JzGbzkLknlwu0EOenSq5/edit?usp=drive_link" },
+            { id: 5, name: "Heni Faridanti A", gender: "female", linkDrive1: "https://drive.google.com/file/d/1PAJpO4hhHiMWMeD9zcFDPgWzEktOGa9k/view?usp=drive_link", linkDrive2: "https://docs.google.com/spreadsheets/d/1xjoceKIwJDq40dAzC82_I9iWB_BPkkez/edit?usp=drive_link" },
+            { id: 6, name: "Ina Solikhati", gender: "female", linkDrive1: "https://drive.google.com/file/d/1m64XbJx0F_OwhoccdCtj6Vqg8lzlwqAA/view?usp=drive_link", linkDrive2: "https://docs.google.com/spreadsheets/d/17Js5S6mfHlJxBwquRgEA3u0PSnigh95f/edit?usp=drive_link" },
+            { id: 7, name: "Isti Kharirotun N", gender: "female", linkDrive1: "https://drive.google.com/file/d/1FUlKHEQkdpcrXHDDcyEYmkrcHKuf_tpB/view?usp=drive_link", linkDrive2: "https://docs.google.com/spreadsheets/d/1qDhlrvB3KvWf-zdLOiLmFGB40E8dPwIk/edit?usp=drive_link" },
+            { id: 8, name: "M Mukhamim", gender: "male", linkDrive1: "https://drive.google.com/file/d/1sumFIb05GLTZabI8aWtY8CubLTJitEo6/view?usp=drive_link", linkDrive2: "https://docs.google.com/spreadsheets/d/10b7M7s_LL9wddg-NZvUsv-0N9kdwAx8X/edit?usp=drive_link" },
+            { id: 9, name: "Mukhlison", gender: "male", linkDrive1: "https://drive.google.com/file/d/10YTF0NgdstDKZs7l6AqmPQaIts3EPDN6/view?usp=drive_link", linkDrive2: "https://docs.google.com/spreadsheets/d/172-hC2oWqEaq9xvOn68ImO3ZrhjzJxHm/edit?usp=drive_link" },
+            { id: 10, name: "Musngidul Umam", gender: "male", linkDrive1: "https://drive.google.com/file/d/1uIkDnIg7FJOKj8jUhY7iH5rJPDvkCklK/view?usp=drive_link", linkDrive2: "https://docs.google.com/spreadsheets/d/1F7PoLFVEo9N-D4cNYNcoxnlXl8jawdYU/edit?usp=drive_link" },
+            { id: 11, name: "Nurkhalimah", gender: "female", linkDrive1: "https://drive.google.com/file/d/1AgW0MFKjtJCo_sR6Q4T6dKIj25JGPbV6/view?usp=drive_link", linkDrive2: "https://docs.google.com/spreadsheets/d/1yPqJciKDYT6j25PDI8ryuas23bOZpMcv/edit?usp=drive_link" },
+            { id: 12, name: "Oktina Laili H", gender: "female", linkDrive1: "https://drive.google.com/file/d/1tfDslQfXu2czNt0gX5WTYUAHSCTTQQRp/view?usp=drive_link", linkDrive2: "https://docs.google.com/spreadsheets/d/1kP8MrPuZi1eMkkKN2luMb_0kV7bR9YgG/edit?usp=drive_link" },
+            { id: 13, name: "Putri Lailatus S", gender: "female", linkDrive1: "https://drive.google.com/file/d/1zs2XH7f7KD6uM-RasG8Ado7BIQAyYUDH/view?usp=drive_link", linkDrive2: "https://docs.google.com/spreadsheets/d/1NEdNEj7qp3GvXGw-bKH6Ag8bvhN8K4V4/edit?usp=drive_link" },
+            { id: 14, name: "Robi Irsa'ni", gender: "male", linkDrive1: "https://drive.google.com/file/d/1wkk7bLGkPzzgYEwZi1zTPHpdoUbyvHQ3/view?usp=drive_link", linkDrive2: "https://docs.google.com/spreadsheets/d/1wvziuNE7m27e6JdM1F3gd7Yw37cR3Cny/edit?usp=drive_link" },
+            { id: 15, name: "Salsabila Nur A", gender: "female", linkDrive1: "https://drive.google.com/file/d/1pRY76olbd1pKY1rwkJvXbEbj3eBcta6c/view?usp=drive_link", linkDrive2: "https://docs.google.com/spreadsheets/d/1kSmJ9CG286r6T1cNpV-JPL2edMMk9R30/edit?usp=drive_link" },
+            { id: 16, name: "Selvi Wulan Sari", gender: "female", linkDrive1: "https://drive.google.com/file/d/18yGI8xK0DNMLto9ip9dqpBbN7V2oWTrL/view?usp=drive_link", linkDrive2: "https://docs.google.com/spreadsheets/d/1-fUmsgS_ic9SUSFRBz0-AWPJ36gc21sr/edit?usp=drive_link" },
+            { id: 17, name: "Syihabudin", gender: "male", linkDrive1: "https://drive.google.com/file/d/1wg1oJucgvhg_eEnXrXw3copXIXENs8NR/view?usp=drive_link", linkDrive2: "https://docs.google.com/spreadsheets/d/1N8ckPKYkAN2CflShRHcJV3SxaSGrJmXT/edit?usp=drive_link" },
+            { id: 18, name: "Urip Ambaripto", gender: "male", linkDrive1: "https://drive.google.com/file/d/1qJKwZR7jlRhciz87oOMR3XtU7bkS9fqC/view?usp=drive_link", linkDrive2: "https://docs.google.com/spreadsheets/d/1gX3U67RZTlFDCNXUZjM8sQl-MSBnyL6N/edit?usp=drive_link" },
+            { id: 19, name: "Warsito", gender: "male", linkDrive1: "https://drive.google.com/file/d/1qo8r1URzoARmj1S4qCD5UVdHfkO6nC0o/view?usp=drive_link", linkDrive2: "https://docs.google.com/spreadsheets/d/16R9e79xDWQI4h7Es_F3YvAZ4KndF5azy/edit?usp=drive_link" }
+        ];
+
+        const tendikData = [
+            { id: 101, name: "Ahmad Mutasir", gender: "male", linkDrive1: "https://drive.google.com/file/d/1eszcYyEs3pk9xR_alaX9n9k-fDSUmec6/view?usp=drive_link", linkDrive2: "https://docs.google.com/spreadsheets/d/1LGRf0rsA6e7jjcAcmoR13pFbO4cfwcoI/edit?usp=drive_link" },
+            { id: 102, name: "Deka Ponco Saputro", gender: "male", linkDrive1: "https://drive.google.com/file/d/1VuRkzTo3uCxw0QTkJTf8aXKQGo4dzTKH/view?usp=drive_link", linkDrive2: "https://docs.google.com/spreadsheets/d/1-MqCNugPjVuCV0iFJvUNV0u8ho340Zjs/edit?usp=drive_link" },
+            { id: 103, name: "Fadliyah", gender: "female", linkDrive1: "https://drive.google.com/file/d/1LqOEMWbJSbaiYHjFy4jCh3XvuSFGN2eG/view?usp=drive_link", linkDrive2: "https://docs.google.com/spreadsheets/d/1tB_wnh0Ru64MaEp3fakk3guPxm4dZX9I/edit?usp=drive_link" },
+            { id: 104, name: "Nuryati", gender: "female", linkDrive1: "https://drive.google.com/file/d/1WXX5IOhXgOrzhPWz9UbtebnVX8160Rd1/view?usp=drive_link", linkDrive2: "https://docs.google.com/spreadsheets/d/1Rq597d80Kov7kyj4lCnV3e6Ut7i7MPzD/edit?usp=drive_link" },
+            { id: 105, name: "Saefulloh", gender: "male", linkDrive1: "https://drive.google.com/file/d/13ZG-xbY3zA-5lSuRbew-FZoF5UXrT2l8/view?usp=drive_link", linkDrive2: "https://docs.google.com/spreadsheets/d/1WvC2g6T8MKul9DmdW3udWOpRl7gX46yj/edit?usp=drive_link" }
+        ];
+
+        let activeTab = 'pendidik';
+        let searchTerm = '';
+
+        // UI State Management
+        const loginForm = document.getElementById('login-form');
+        const loginScreen = document.getElementById('login-screen');
+        const mainDashboard = document.getElementById('main-dashboard');
+        const loginError = document.getElementById('login-error');
+        const personGrid = document.getElementById('person-grid');
+        const modalContainer = document.getElementById('modal-container');
+        const modalContent = document.getElementById('modal-content');
+
+        // Login Handler
+        loginForm.onsubmit = (e) => {
+            e.preventDefault();
+            const user = document.getElementById('username').value;
+            const pass = document.getElementById('password').value;
+
+            if (user === "20300486" && pass === "20300486") {
+                loginScreen.classList.add('hidden');
+                mainDashboard.classList.remove('hidden');
+                render();
+            } else {
+                loginError.classList.remove('hidden');
+            }
+        };
+
+        function logout() {
+            mainDashboard.classList.add('hidden');
+            loginScreen.classList.remove('hidden');
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+            loginError.classList.add('hidden');
+        }
+
+        function switchTab(tab) {
+            activeTab = tab;
+            document.getElementById('tab-pendidik').className = tab === 'pendidik' ? 'px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all bg-indigo-600 text-white' : 'px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all text-slate-400 hover:text-slate-600';
+            document.getElementById('tab-tendik').className = tab === 'tendik' ? 'px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all bg-indigo-600 text-white' : 'px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all text-slate-400 hover:text-slate-600';
+            render();
+        }
+
+        function handleSearch() {
+            searchTerm = document.getElementById('search-input').value.toLowerCase();
+            render();
+        }
+
+        function render() {
+            const data = activeTab === 'pendidik' ? pendidikData : tendikData;
+            const filtered = data.filter(p => p.name.toLowerCase().includes(searchTerm));
+            
+            personGrid.innerHTML = filtered.map(person => `
+                <div onclick="openModal(${person.id}, '${activeTab}')" class="group cursor-pointer">
+                    <div class="relative bg-white rounded-[2.5rem] p-6 transition-all duration-500 hover:-translate-y-2 shadow-sm hover:shadow-xl border border-slate-50 flex flex-col items-center">
+                        <div class="w-20 h-20 rounded-[1.8rem] p-1 bg-gradient-to-br ${person.gender === 'male' ? 'from-indigo-600 to-blue-500' : 'from-rose-500 to-pink-500'} mb-4 transition-transform group-hover:rotate-3">
+                            <div class="w-full h-full bg-white rounded-2xl overflow-hidden flex items-center justify-center">
+                                <i data-lucide="${person.gender === 'male' ? 'user' : 'user-round'}" class="w-10 h-10 text-slate-300"></i>
+                            </div>
+                        </div>
+                        <h3 class="text-[13px] font-black text-slate-800 text-center leading-tight group-hover:text-indigo-600">
+                            ${person.name}
+                        </h3>
+                    </div>
+                </div>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        function openModal(id, tab) {
+            const data = tab === 'pendidik' ? pendidikData : tendikData;
+            const person = data.find(p => p.id === id);
+            
+            const isMale = person.gender === 'male';
+            const bgColor = isMale ? 'bg-indigo-50' : 'bg-rose-50';
+
+            modalContent.innerHTML = `
+                <div class="p-6">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="w-12 h-12 rounded-2xl ${bgColor} flex items-center justify-center">
+                             <i data-lucide="${isMale ? 'user' : 'user-round'}" class="w-8 h-8 text-slate-400"></i>
+                        </div>
+                        <button onclick="closeModal()" class="p-2 hover:bg-slate-100 text-slate-400 rounded-full transition-colors">
+                            <i data-lucide="x" class="w-[18px] h-[18px]"></i>
+                        </button>
+                    </div>
+
+                    <div class="mb-6">
+                        <h2 class="text-lg font-black text-slate-900 leading-tight">${person.name}</h2>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-3">
+                        <a href="${person.linkDrive1}" target="_blank" class="flex flex-col items-center gap-2 p-3 bg-slate-50 hover:bg-white border border-slate-100 hover:border-indigo-200 rounded-2xl transition-all group">
+                            <i data-lucide="globe" class="text-indigo-500 w-4 h-4 group-hover:scale-110 transition-transform"></i>
+                            <span class="text-[8px] font-black uppercase tracking-tighter text-slate-500">Profil Utama</span>
+                        </a>
+
+                        <a href="${person.linkDrive2}" target="_blank" class="flex flex-col items-center gap-2 p-3 bg-slate-50 hover:bg-white border border-slate-100 hover:border-emerald-200 rounded-2xl transition-all group">
+                            <i data-lucide="database" class="text-emerald-500 w-4 h-4 group-hover:scale-110 transition-transform"></i>
+                            <span class="text-[8px] font-black uppercase tracking-tighter text-slate-500">Arsip Digital</span>
+                        </a>
+                    </div>
+                    
+                    <div class="mt-6 pt-4 border-t border-slate-50 flex items-center justify-center">
+                         <div class="flex items-center gap-1.5 opacity-30">
+                            <i data-lucide="shield-check" class="w-[10px] h-[10px]"></i>
+                            <span class="text-[7px] font-bold uppercase tracking-[0.2em]">Verified PTK 2026</span>
+                         </div>
+                    </div>
+                </div>
+            `;
+            modalContainer.classList.remove('hidden');
+            lucide.createIcons();
+        }
+
+        function closeModal() {
+            modalContainer.classList.add('hidden');
+        }
+
+        // Initialize icons on load
+        window.onload = () => {
+            lucide.createIcons();
+        }
+    </script>
+</body>
+</html>
