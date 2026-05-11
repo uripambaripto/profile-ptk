@@ -4,11 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile PTK - SMP Diponegoro Sampang</title>
+    
+    <!-- PENGATURAN FAVICON (Logo Dipo) -->
+    <link rel="icon" type="image/jpeg" href="https://i.ibb.co.com/x8PgpBdZ/logo-dipo.jpg">
+    <link rel="shortcut icon" href="https://i.ibb.co.com/x8PgpBdZ/logo-dipo.jpg">
+    <link rel="apple-touch-icon" href="https://i.ibb.co.com/x8PgpBdZ/logo-dipo.jpg">
+
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
     <style>
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
@@ -22,8 +29,19 @@
             from { opacity: 0; transform: translateY(10px); } 
             to { opacity: 1; transform: translateY(0); } 
         }
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(2deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
         .animate-zoom-in { animation: zoom-in 0.3s cubic-bezier(0.16, 1, 0.3, 1) both; }
         .animate-fade-in { animation: fade-in 0.5s ease-out both; }
+        
+        /* Animasi Melayang */
+        .floating-art {
+            animation: float 4s ease-in-out infinite;
+            filter: drop-shadow(0 20px 30px rgba(0,0,0,0.1));
+        }
         
         select {
             appearance: none;
@@ -31,6 +49,10 @@
             background-repeat: no-repeat;
             background-position: right 1.5rem center;
             background-size: 1.2rem;
+        }
+
+        .role-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .role-card:hover {
@@ -41,49 +63,59 @@
 </head>
 <body class="min-h-screen text-slate-900 overflow-x-hidden">
 
+    <!-- Global Floating Image (z-index diset ke 150 agar di depan modal) -->
+    <div class="fixed bottom-4 right-4 md:bottom-10 md:right-10 z-[150] pointer-events-none select-none w-32 md:w-56 lg:w-72 animate-fade-in">
+        <img src="https://i.ibb.co.com/Y7TK3n2L/imageedit-1-5692967174.png" alt="Mascot Art" class="floating-art w-full h-auto">
+    </div>
+
     <div id="app">
         <!-- 1. Role Selection Screen -->
-        <div id="role-screen" class="min-h-screen flex flex-col items-center justify-center p-6 relative">
+        <div id="role-screen" class="min-h-screen flex items-center justify-center p-6 relative">
             <div class="absolute top-[-10%] right-[-10%] w-96 h-96 bg-indigo-100/50 rounded-full blur-3xl"></div>
-            
-            <div class="w-full max-w-[800px] relative z-10 text-center flex-grow flex flex-col justify-center">
-                <div class="mb-12 animate-fade-in">
-                    <div class="w-16 h-16 bg-indigo-600 rounded-2xl flex items-center justify-center text-white shadow-xl mx-auto mb-6">
-                        <i data-lucide="school" size="32"></i>
+            <div class="w-full max-w-[800px] relative z-10 text-center">
+                <div class="mb-10 animate-fade-in">
+                    <!-- Logo Dipo -->
+                    <div class="w-32 h-32 md:w-40 md:h-40 bg-white rounded-3xl flex items-center justify-center shadow-2xl mx-auto mb-6 overflow-hidden p-3 border border-slate-50">
+                        <img src="https://i.ibb.co.com/x8PgpBdZ/logo-dipo.jpg" alt="logo dipo" class="w-full h-full object-contain">
                     </div>
-                    <h1 class="text-4xl font-black tracking-tighter text-slate-900">Selamat Datang</h1>
-                    <h2 class="text-2xl font-extrabold text-emerald-800 tracking-tight mt-1">Profile GTK SMP DIPONEGORO SAMPANG</h2>
-                    <h3 class="text-2xl font-extrabold text-rose-600 tracking-tight mt-1">Bulan Maret 2026</h3>
-                    <p class="text-slate-500 font-bold text-sm mt-4 uppercase tracking-[0.2em]">Silahkan Pilih Peranan Anda</p>
+                    
+                    <h1 class="text-3xl md:text-4xl font-black tracking-tighter text-slate-900">Selamat Datang</h1>
+                    <h2 class="text-xl md:text-2xl font-extrabold text-emerald-800 tracking-tight mt-1">Profile GTK SMP DIPONEGORO SAMPANG</h2>
+                    <h3 class="text-xl md:text-2xl font-extrabold text-rose-600 tracking-tight mt-1">Bulan Mei 2026</h3>
+                    <p class="text-slate-500 font-bold text-[10px] md:text-xs mt-4 uppercase tracking-[0.2em]">Silahkan Pilih Peranan Anda</p>
                 </div>
 
-                <div class="grid grid-cols-2 gap-4 md:gap-8 animate-zoom-in">
-                    <button onclick="selectRole('pendidik')" class="role-card group bg-white p-6 md:p-10 rounded-[2rem] md:rounded-[2.5rem] border border-slate-100 transition-all duration-300 flex flex-col items-center text-center">
-                        <div class="w-14 h-14 md:w-20 md:h-20 bg-indigo-50 rounded-2xl md:rounded-3xl flex items-center justify-center text-indigo-600 mb-4 md:mb-6 group-hover:bg-indigo-600 group-hover:text-white transition-colors duration-300">
-                            <i data-lucide="graduation-cap" class="w-8 h-8 md:w-10 md:h-10"></i>
-                        </div>
-                        <h3 class="text-lg md:text-xl font-black text-slate-800 mb-2">Guru</h3>
-                        <p class="text-slate-400 text-[10px] md:text-xs font-medium hidden sm:block">Akses profil pendidik & administrasi mengajar</p>
-                    </button>
+                <!-- Container Utama Grid -->
+                <div class="flex flex-col gap-4 md:gap-6 animate-zoom-in">
+                    <div class="grid grid-cols-2 gap-4 md:gap-6">
+                        <button onclick="selectRole('pendidik')" class="role-card group bg-white p-6 md:p-8 rounded-[2rem] md:rounded-[2.5rem] border border-slate-100 flex flex-col items-center text-center">
+                            <div class="w-14 h-14 md:w-16 md:h-16 bg-indigo-50 rounded-2xl md:rounded-3xl flex items-center justify-center text-indigo-600 mb-4 group-hover:bg-indigo-600 group-hover:text-white transition-colors duration-300">
+                                <i data-lucide="graduation-cap" class="w-8 h-8 md:w-9 md:h-9"></i>
+                            </div>
+                            <h3 class="text-base md:text-lg font-black text-slate-800 mb-1">Guru</h3>
+                            <p class="text-slate-400 text-[10px] font-medium hidden sm:block">Profil Pendidik</p>
+                        </button>
 
-                    <button onclick="selectRole('tendik')" class="role-card group bg-white p-6 md:p-10 rounded-[2rem] md:rounded-[2.5rem] border border-slate-100 transition-all duration-300 flex flex-col items-center text-center">
-                        <div class="w-14 h-14 md:w-20 md:h-20 bg-rose-50 rounded-2xl md:rounded-3xl flex items-center justify-center text-rose-600 mb-4 md:mb-6 group-hover:bg-rose-600 group-hover:text-white transition-colors duration-300">
-                            <i data-lucide="briefcase" class="w-8 h-8 md:w-10 md:h-10"></i>
+                        <button onclick="selectRole('tendik')" class="role-card group bg-white p-6 md:p-8 rounded-[2rem] md:rounded-[2.5rem] border border-slate-100 flex flex-col items-center text-center">
+                            <div class="w-14 h-14 md:w-16 md:h-16 bg-rose-50 rounded-2xl md:rounded-3xl flex items-center justify-center text-rose-600 mb-4 group-hover:bg-rose-600 group-hover:text-white transition-colors duration-300">
+                                <i data-lucide="briefcase" class="w-8 h-8 md:w-9 md:h-9"></i>
+                            </div>
+                            <h3 class="text-base md:text-lg font-black text-slate-800 mb-1">Tendik</h3>
+                            <p class="text-slate-400 text-[10px] font-medium hidden sm:block">Profil Tendik</p>
+                        </button>
+                    </div>
+
+                    <a href="https://docs.google.com/spreadsheets/d/1ukPk8KsOQkUZuytvawgTjk9ALKoSHp7Y/edit?usp=sharing&ouid=108695109185601320347&rtpof=true&sd=true" target="_blank" class="role-card group bg-white p-6 md:p-8 rounded-[2rem] md:rounded-[2.5rem] border border-slate-100 flex flex-row items-center justify-center gap-6 text-left cursor-pointer">
+                        <div class="w-14 h-14 md:w-16 md:h-16 bg-emerald-50 rounded-2xl md:rounded-3xl flex items-center justify-center text-emerald-600 group-hover:bg-emerald-600 group-hover:text-white transition-colors duration-300 shrink-0">
+                            <i data-lucide="book-open" class="w-8 h-8 md:w-9 md:h-9"></i>
                         </div>
-                        <h3 class="text-lg md:text-xl font-black text-slate-800 mb-2">Staf Tendik</h3>
-                        <p class="text-slate-400 text-[10px] md:text-xs font-medium hidden sm:block">Akses data kependidikan & arsip operasional</p>
-                    </button>
+                        <div>
+                            <h3 class="text-base md:text-xl font-black text-slate-800 mb-1">Absensi Siswa</h3>
+                            <p class="text-slate-400 text-[10px] md:text-xs font-medium tracking-widest leading-none">File absensi siswa dalam dapodik</p>
+                        </div>
+                    </a>
                 </div>
             </div>
-
-            <!-- Footer Quote Section -->
-            <footer class="w-full max-w-[600px] mt-12 py-8 px-4 text-center animate-fade-in relative z-10">
-                <div class="inline-block p-1 bg-gradient-to-r from-transparent via-slate-200 to-transparent w-full h-[1px] mb-6 opacity-50"></div>
-                <div id="quote-container" class="space-y-2">
-                    <p id="quote-text" class="text-slate-600 italic font-medium text-sm md:text-base leading-relaxed">"..."</p>
-                    <p id="quote-author" class="text-indigo-600 font-black text-[10px] md:text-[11px] uppercase tracking-[0.2em] pt-1"></p>
-                </div>
-            </footer>
         </div>
 
         <!-- 2. Login Screen -->
@@ -105,17 +137,17 @@
 
                 <form id="login-form" class="space-y-4">
                     <div class="space-y-1">
-                        <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-4">Nama Lengkap</label>
+                        <label class="text-[10px] font-black tracking-widest text-slate-400 ml-4">Nama Lengkap</label>
                         <select id="name-dropdown" required class="w-full px-6 py-4 bg-white border border-slate-100 rounded-2xl font-bold outline-none focus:ring-4 focus:ring-indigo-100 transition-all text-sm cursor-pointer">
                             <option value="" disabled selected>Pilih nama anda...</option>
                         </select>
                     </div>
                     <div class="space-y-1">
-                        <label class="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-4">Password</label>
+                        <label class="text-[10px] font-black tracking-widest text-slate-400 ml-4">Password</label>
                         <input type="password" id="password" placeholder="••••••••" required class="w-full px-6 py-4 bg-white border border-slate-100 rounded-2xl font-bold outline-none focus:ring-4 focus:ring-indigo-100 transition-all text-sm">
                     </div>
                     <p id="login-error" class="text-rose-500 text-[10px] font-black text-center hidden pt-2">Password tidak sah.</p>
-                    <button type="submit" class="w-full py-4 mt-4 bg-slate-900 text-white rounded-2xl font-black uppercase tracking-[0.2em] text-[10px] hover:bg-black transition-all shadow-lg active:scale-95 flex items-center justify-center gap-2">
+                    <button type="submit" class="w-full py-4 mt-4 bg-slate-900 text-white rounded-2xl font-black tracking-[0.2em] text-[10px] hover:bg-black transition-all shadow-lg active:scale-95 flex items-center justify-center gap-2">
                         Masuk Portal <i data-lucide="arrow-right" size="14"></i>
                     </button>
                 </form>
@@ -127,8 +159,8 @@
             <header class="p-4 max-w-7xl mx-auto sticky top-0 z-40">
                 <div class="bg-white/70 backdrop-blur-2xl rounded-[2.5rem] p-3 shadow-sm border border-white/50 flex items-center justify-between">
                     <div class="flex items-center gap-4 px-3">
-                        <div class="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white shadow-lg">
-                            <i data-lucide="layout-grid" size="20"></i>
+                        <div class="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-lg overflow-hidden p-1.5 border border-slate-50">
+                            <img src="https://i.ibb.co.com/x8PgpBdZ/logo-dipo.jpg" alt="logo" class="w-full h-full object-contain">
                         </div>
                         <div class="hidden sm:block">
                             <h1 class="text-sm font-black tracking-tight text-slate-900 leading-none">SMP Diponegoro Sampang</h1>
@@ -159,60 +191,49 @@
                 <div id="person-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6"></div>
                 <div id="empty-state" class="hidden py-20 text-center">
                     <i data-lucide="search-x" size="40" class="mx-auto mb-4 text-slate-300"></i>
-                    <p class="text-slate-400 font-black text-sm uppercase tracking-widest">Data tidak dijumpai</p>
+                    <p class="text-slate-400 font-black text-sm tracking-widest">Data tidak dijumpai</p>
                 </div>
             </main>
         </div>
 
-        <!-- Detail Modal Pop-up -->
+        <!-- Detail Modal Pop-up (z-index modal adalah 100) -->
         <div id="modal-container" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4">
-            <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="closeModalAndExit()"></div>
-            <div id="modal-content" class="relative bg-white w-full max-w-[300px] rounded-[2rem] overflow-hidden shadow-2xl border border-white animate-zoom-in">
-                <!-- Inner content -->
-            </div>
+            <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="closeModal()"></div>
+            <div id="modal-content" class="relative bg-white w-full max-w-[300px] rounded-[2rem] overflow-hidden shadow-2xl border border-white animate-zoom-in"></div>
         </div>
     </div>
 
     <script>
         const pendidikData = [
-            { id: 1, name: "Ali Sadikin", gender: "male", role: "Guru Mapel", linkDrive1: "https://drive.google.com/file/d/1hWMW1jh7QUMhvruB_e9_vwRFZlodqL8Q/view?usp=sharing", linkDrive2: "https://docs.google.com/spreadsheets/d/1nVIiDMGaQxTFA282YtznKhsd6QPMV-Km/edit?usp=sharing&ouid=108695109185601320347&rtpof=true&sd=true" },
-            { id: 2, name: "Arief Kurniawan", gender: "male", role: "Guru Mapel", linkDrive1: "https://drive.google.com/file/d/1GRuA6fWzv5VvoROokrKeWaRnAZoEVAeX/view?usp=sharing", linkDrive2: "https://docs.google.com/spreadsheets/d/1ipn8WRrhIbGgM1146MxPgcNh8kGckNwD/edit?usp=sharing&ouid=108695109185601320347&rtpof=true&sd=true" },
-            { id: 3, name: "Atin Septiasari", gender: "female", role: "Guru Mapel", linkDrive1: "https://drive.google.com/file/d/1_3d97vlsLMiZWqqT7iFCovTPYV7ESfME/view?usp=sharing", linkDrive2: "https://docs.google.com/spreadsheets/d/1n2uYqGyvYWR2_qc2P-t3fPcdA2DSJ_PW/edit?usp=sharing&ouid=108695109185601320347&rtpof=true&sd=true" },
-            { id: 4, name: "Fadlan Zulianto R", gender: "male", role: "Guru Mapel", linkDrive1: "https://drive.google.com/file/d/1QypplYW38j_v37vdEHm5rKoqiXAVK9Z5/view?usp=sharing", linkDrive2: "https://docs.google.com/spreadsheets/d/1WxazXcAKwBGUeAbhCgq6SNEFAsmHOZqZ/edit?usp=sharing&ouid=108695109185601320347&rtpof=true&sd=true" },
-            { id: 5, name: "Heni Faridanti A", gender: "female", role: "Guru Mapel", linkDrive1: "https://drive.google.com/file/d/15t1aq6q3ZXtX0aCPPsKwjfRCI9abJ-4y/view?usp=sharing", linkDrive2: "https://docs.google.com/spreadsheets/d/12QNZd2HlnQ0Ga2JQFIB96k4K4ohcodpj/edit?usp=sharing&ouid=108695109185601320347&rtpof=true&sd=true" },
-            { id: 6, name: "Ina Solikhati", gender: "female", role: "Guru Mapel", linkDrive1: "https://drive.google.com/file/d/1G40MoAts7yRgKkm3ahpbhGNGH-l8t5hC/view?usp=sharing", linkDrive2: "https://docs.google.com/spreadsheets/d/1vf3gUaRMNB4Q8EH0XXT7PlaO2nMI6XuQ/edit?usp=sharing&ouid=108695109185601320347&rtpof=true&sd=true" },
-            { id: 7, name: "Isti Kharirotun N", gender: "female", role: "Guru Mapel", linkDrive1: "https://drive.google.com/file/d/1ML-FReJsL_bat3D0OTh0EBoV0GpSIuag/view?usp=sharing", linkDrive2: "https://docs.google.com/spreadsheets/d/1UliJc4h8T1vXrsFIgGFYMbL9H9ESVKtb/edit?usp=sharing&ouid=108695109185601320347&rtpof=true&sd=true" },
-            { id: 8, name: "M Mukhamim", gender: "male", role: "Guru Mapel", linkDrive1: "https://drive.google.com/file/d/1DipejcHRyaMxPP6i4RnDwxaK5mvF4bY3/view?usp=sharing", linkDrive2: "https://docs.google.com/spreadsheets/d/1Prvh0jkce1xLJkX5R_ckhtvD_kOWyZyw/edit?usp=sharing&ouid=108695109185601320347&rtpof=true&sd=true" },
-            { id: 9, name: "Mukhlison", gender: "male", role: "Guru Mapel", linkDrive1: "https://drive.google.com/file/d/1vM6FSeHBIxRAYYGqoynTu9-b94BzA70P/view?usp=sharing", linkDrive2: "https://docs.google.com/spreadsheets/d/1zbQ1NL19sx7UjeczQq_x3pvYefiFYiX0/edit?usp=sharing&ouid=108695109185601320347&rtpof=true&sd=true" },
-            { id: 10, name: "Musngidul Umam", gender: "male", role: "Guru Mapel", linkDrive1: "https://drive.google.com/file/d/1VeaheWhHKLBjZHMpDf-OfOkWV1C5jlal/view?usp=sharing", linkDrive2: "https://docs.google.com/spreadsheets/d/1B-PksuToSlrW7kc0FrZHS71U1gwOOaPP/edit?usp=sharing&ouid=108695109185601320347&rtpof=true&sd=true" },
-            { id: 11, name: "Nurkhalimah", gender: "female", role: "Guru Mapel", linkDrive1: "https://drive.google.com/file/d/1xo4sihyoRd0GcRGvjTwLdoKse5FRJLKL/view?usp=sharing", linkDrive2: "https://docs.google.com/spreadsheets/d/1rn2BecAV0lF4Iqf2VokE3M3R-SAd6DCr/edit?usp=sharing&ouid=108695109185601320347&rtpof=true&sd=true" },
-            { id: 12, name: "Oktina Laili H", gender: "female", role: "Guru Mapel", linkDrive1: "https://drive.google.com/file/d/1eSAu2350Xn8Fm9hyiZZzarDt_St7GZ9j/view?usp=sharing", linkDrive2: "https://docs.google.com/spreadsheets/d/1p84wrgoQ1SbGCYwj36IkECGxZlNRWLN2/edit?usp=sharing&ouid=108695109185601320347&rtpof=true&sd=true" },
-            { id: 13, name: "Putri Lailatus S", gender: "female", role: "Guru Mapel", linkDrive1: "https://drive.google.com/file/d/1IPef9s3g49GPBjHUghQMya4AMmyzy4S4/view?usp=sharing", linkDrive2: "https://docs.google.com/spreadsheets/d/1_ZiumnYwKX2EV0RDhmJwiWQQt_XjViPJ/edit?usp=sharing&ouid=108695109185601320347&rtpof=true&sd=true" },
-            { id: 14, name: "Robi Irsa'ni", gender: "male", role: "Guru Mapel", linkDrive1: "https://drive.google.com/file/d/12DDMX-5JgmJ8JZBgnpm9qcqOu_W-r22X/view?usp=sharing", linkDrive2: "https://docs.google.com/spreadsheets/d/1h8jEop3Zp-XD8hTZNgOnJbRD8QxbIcpq/edit?usp=sharing&ouid=108695109185601320347&rtpof=true&sd=true" },
-            { id: 15, name: "Salsabila Nur A", gender: "female", role: "Guru Mapel", linkDrive1: "https://drive.google.com/file/d/1sbzzDRZ3H7ooxGkN56uS-CIiwbvOujSc/view?usp=sharing", linkDrive2: "https://docs.google.com/spreadsheets/d/1HASVK3EwObpDHDaXboL3s42wftOYXbE3/edit?usp=sharing&ouid=108695109185601320347&rtpof=true&sd=true" },
-            { id: 16, name: "Selvi Wulan Sari", gender: "female", role: "Guru Mapel", linkDrive1: "https://drive.google.com/file/d/1wVjEI5KAuZoff8mB9k34dhvdMdPp7845/view?usp=sharing", linkDrive2: "https://docs.google.com/spreadsheets/d/1FF4owOIAkSoO-rN5AkGbKq_nc5LiDkdY/edit?usp=sharing&ouid=108695109185601320347&rtpof=true&sd=true" },
-            { id: 17, name: "Syihabudin", gender: "male", role: "Guru Mapel", linkDrive1: "https://drive.google.com/file/d/1V3_Yeeevrdm645m6gjngYtCXeYDd_gS0/view?usp=sharing", linkDrive2: "https://docs.google.com/spreadsheets/d/19HYyNf6gdX51BqKVAY5PZG8fo5zn_aoj/edit?usp=sharing&ouid=108695109185601320347&rtpof=true&sd=true" },
-            { id: 18, name: "Urip Ambaripto", gender: "male", role: "Guru Mapel", linkDrive1: "https://drive.google.com/file/d/1FufNk3eg_8c15No4GyFZj466bPD92GL6/view?usp=sharing", linkDrive2: "https://docs.google.com/spreadsheets/d/1SlRnZuEEHmTNpGPi3AqN4rGNWdycwCKW/edit?usp=sharing&ouid=108695109185601320347&rtpof=true&sd=true" },
-            { id: 19, name: "Warsito", gender: "male", role: "Guru Mapel", linkDrive1: "https://drive.google.com/file/d/1pd_IZhVmxaaYZ43I-DNF1bAI-s4ghpbI/view?usp=sharing", linkDrive2: "https://docs.google.com/spreadsheets/d/1JunE-NNVHOUkVoMWRxfEcPL67MxQasJu/edit?usp=sharing&ouid=108695109185601320347&rtpof=true&sd=true" }
+            { id: 1, name: "Ali Sadikin", gender: "male", role: "Guru Mapel", linkDrive1: "https://drive.google.com/file/d/1oFmmt05TLUG52L5d9jJH7e0_bTTu5zof/view?usp=sharing", linkDrive2: "https://drive.google.com/file/d/1BuhrQJyDPgM7bbl2dIDoQhZQP45FF6RO/view?usp=sharing", image: "https://i.ibb.co.com/jZfHvkMZ/ali-sadikin1.jpg" },
+            { id: 2, name: "Arief Kurniawan", gender: "male", role: "Guru Mapel", linkDrive1: "https://drive.google.com/file/d/1oTvzOqEQdPjnz6yWx6YW7PxhlHQJI4Ay/view?usp=sharing", linkDrive2: "https://drive.google.com/file/d/1BuhrQJyDPgM7bbl2dIDoQhZQP45FF6RO/view?usp=sharing", image: "https://i.ibb.co.com/v97TRqK/FOTO-ARIF.jpg" },
+            { id: 3, name: "Atin Septiasari", gender: "female", role: "Guru Mapel", linkDrive1: "https://drive.google.com/file/d/1tQp3lO47tue7y4dAQkqaaQMs9heJu4AI/view?usp=sharing", linkDrive2: "https://drive.google.com/file/d/1BuhrQJyDPgM7bbl2dIDoQhZQP45FF6RO/view?usp=sharing", image: "https://i.ibb.co.com/j9F9kyq1/atin.png" },
+            { id: 4, name: "Fadlan Zulianto R", gender: "male", role: "Guru Mapel", linkDrive1: "https://drive.google.com/file/d/1zJUL4eLQ6ZlMT1Yf5WsJznNTB0sc3Pde/view?usp=sharing", linkDrive2: "https://drive.google.com/file/d/1BuhrQJyDPgM7bbl2dIDoQhZQP45FF6RO/view?usp=sharing", image: "https://i.ibb.co.com/BVpD8wj0/man-avatar.png" },
+            { id: 5, name: "Heni Faridanti A", gender: "female", role: "Guru Mapel", linkDrive1: "https://drive.google.com/file/d/1TdxzycFYQWTTZRFSYaHAehYoyLW0lRmK/view?usp=sharing", linkDrive2: "https://drive.google.com/file/d/1BuhrQJyDPgM7bbl2dIDoQhZQP45FF6RO/view?usp=sharing", image: "https://i.ibb.co.com/M5cQgcBm/uni.jpg" },
+            { id: 6, name: "Ina Solikhati", gender: "female", role: "Guru Mapel", linkDrive1: "https://drive.google.com/file/d/16vez1xlw04k1grxfvDOPMEDnkI51dEZa/view?usp=sharing", linkDrive2: "https://drive.google.com/file/d/1BuhrQJyDPgM7bbl2dIDoQhZQP45FF6RO/view?usp=sharing", image: "https://i.ibb.co.com/xqjsYK9G/ina.png" },
+            { id: 7, name: "Isti Kharirotun N", gender: "female", role: "Guru Mapel", linkDrive1: "https://drive.google.com/file/d/1VzPayjd0HgyggVXoRjjRwxgcQecyZuo_/view?usp=sharing", linkDrive2: "https://drive.google.com/file/d/1BuhrQJyDPgM7bbl2dIDoQhZQP45FF6RO/view?usp=sharing", image: "https://i.ibb.co.com/rVYdwcB/isti.png" },
+            { id: 8, name: "M Mukhamim", gender: "male", role: "Guru Mapel", linkDrive1: "https://drive.google.com/file/d/1eMkPUBtMPhu7dmaklS1-K8OcJYxCDXnd/view?usp=sharing", linkDrive2: "https://drive.google.com/file/d/1BuhrQJyDPgM7bbl2dIDoQhZQP45FF6RO/view?usp=sharing", image: "https://i.ibb.co.com/B51p03Qc/khamim-foto.jpg" },
+            { id: 9, name: "Mukhlison", gender: "male", role: "Guru Mapel", linkDrive1: "https://drive.google.com/file/d/1RfO8YsrqOgB83XvwsK7xMlBunBUBYhuh/view?usp=sharing", linkDrive2: "https://drive.google.com/file/d/1BuhrQJyDPgM7bbl2dIDoQhZQP45FF6RO/view?usp=sharing", image: "https://i.ibb.co.com/fzJ0GLwX/son.png" },
+            { id: 10, name: "Musngidul Umam", gender: "male", role: "Guru Mapel", linkDrive1: "https://drive.google.com/file/d/1vUnxVLkD-zsjvtNvNVc-xphb7mRK1NlT/view?usp=sharing", linkDrive2: "https://drive.google.com/file/d/1BuhrQJyDPgM7bbl2dIDoQhZQP45FF6RO/view?usp=sharing", image: "https://i.ibb.co.com/nMySmZmX/UMAM.jpg" },
+            { id: 11, name: "Nurkhalimah", gender: "female", role: "Guru Mapel", linkDrive1: "https://drive.google.com/file/d/1N0hQZUyV0FbXPAs1-sanqJ-wsGsnHlGk/view?usp=sharing", linkDrive2: "https://drive.google.com/file/d/1BuhrQJyDPgM7bbl2dIDoQhZQP45FF6RO/view?usp=sharing", image: "https://i.ibb.co.com/Z6Wzyrnw/nurhalimah.png" },
+            { id: 12, name: "Oktina Laili H", gender: "female", role: "Guru Mapel", linkDrive1: "https://drive.google.com/file/d/1ts2N7BBRPNs1TQezkg-FI0Oe8JzxDe1C/view?usp=sharing", linkDrive2: "https://drive.google.com/file/d/1BuhrQJyDPgM7bbl2dIDoQhZQP45FF6RO/view?usp=sharing", image: "https://i.ibb.co.com/3yp7hWFf/okti.png" },
+            { id: 13, name: "Putri Lailatus S", gender: "female", role: "Guru Mapel", linkDrive1: "https://drive.google.com/file/d/1wZrgv8RRV8ZGbpT1Oo-l0VYRpSfReAWv/view?usp=sharing", linkDrive2: "https://drive.google.com/file/d/1BuhrQJyDPgM7bbl2dIDoQhZQP45FF6RO/view?usp=sharing", image: "https://i.ibb.co.com/45gp9HL/putri.png" },
+            { id: 14, name: "Robi Irsa'ni", gender: "male", role: "Guru Mapel", linkDrive1: "https://drive.google.com/file/d/1eynh5zsPeR72LOLlHuJha4nc0CULuDLw/view?usp=sharing", linkDrive2: "https://drive.google.com/file/d/1BuhrQJyDPgM7bbl2dIDoQhZQP45FF6RO/view?usp=sharing", image: "https://i.ibb.co.com/PGVSJVMr/robi.jpg" },
+            { id: 15, name: "Salsabila Nur A", gender: "female", role: "Guru Mapel", linkDrive1: "https://drive.google.com/file/d/1eFGwfmua7QpD8_8DYg6vG7nQn0dkRtH7/view?usp=sharing", linkDrive2: "https://drive.google.com/file/d/1BuhrQJyDPgM7bbl2dIDoQhZQP45FF6RO/view?usp=sharing", image: "https://i.ibb.co.com/4gjrbHN9/salsa.jpg" },
+            { id: 16, name: "Selvi Wulan Sari", gender: "female", role: "Guru Mapel", linkDrive1: "https://drive.google.com/file/d/11F-nQq39LNkiL-EVI686M7OAAUjPR0Ai/view?usp=sharing", linkDrive2: "https://drive.google.com/file/d/1BuhrQJyDPgM7bbl2dIDoQhZQP45FF6RO/view?usp=sharing", image: "https://i.ibb.co.com/v4ctTD94/SELVI.jpg" },
+            { id: 17, name: "Syihabudin", gender: "male", role: "Guru Mapel", linkDrive1: "https://drive.google.com/file/d/1X2EZCp3SsDWXKz2phBdILJyECgftJujr/view?usp=sharing", linkDrive2: "https://drive.google.com/file/d/1BuhrQJyDPgM7bbl2dIDoQhZQP45FF6RO/view?usp=sharing", image: "https://i.ibb.co.com/BVpD8wj0/man-avatar.png" },
+            { id: 18, name: "Urip Ambaripto", gender: "male", role: "Guru Mapel", linkDrive1: "https://drive.google.com/file/d/1SSTqep658JtYz5V228pqhKyHt0Q_f4yW/view?usp=sharing", linkDrive2: "https://drive.google.com/file/d/1BuhrQJyDPgM7bbl2dIDoQhZQP45FF6RO/view?usp=sharing", image: "https://i.ibb.co.com/KcCyQ4Sx/urip-profile.jpg" },
+            { id: 19, name: "Warsito", gender: "male", role: "Guru Mapel", linkDrive1: "https://drive.google.com/file/d/1nI-J8u3HguzjKQoFkEkgbC87bhajiyHO/view?usp=sharing", linkDrive2: "https://drive.google.com/file/d/1BuhrQJyDPgM7bbl2dIDoQhZQP45FF6RO/view?usp=sharing", image: "https://i.ibb.co.com/BVpD8wj0/man-avatar.png" }
         ];
 
         const tendikData = [
-            { id: 101, name: "Ahmad Mutasir", gender: "male", role: "Kepala Sekolah", linkDrive1: "https://drive.google.com/file/d/1REmjLODW5Plh_dv2QmV1BB2MYEuyUOlJ/view?usp=sharing", linkDrive2: "https://docs.google.com/spreadsheets/d/1XVK9PsipcjidKjsD3FtN942RR10LYNV8/edit?usp=sharing&ouid=108695109185601320347&rtpof=true&sd=true" },
-            { id: 102, name: "Deka Ponco Saputro", gender: "male", role: "Administrasi", linkDrive1: "https://drive.google.com/file/d/1Yb5ociNwgh6JZvv4N4stpTAeuYkIZ-w0/view?usp=sharing", linkDrive2: "https://docs.google.com/spreadsheets/d/1tCPcZ3vLH37Zwo1e4UZ3ZC7weLWOvWYb/edit?usp=sharing&ouid=108695109185601320347&rtpof=true&sd=true" },
-            { id: 103, name: "Fadliyah", gender: "female", role: "Bendahara", linkDrive1: "https://drive.google.com/file/d/1ft_CAxIxlRFqB9tELm0IdARRZFjhpR2F/view?usp=sharing", linkDrive2: "https://docs.google.com/spreadsheets/d/1Jx5t2hmXMlasFxe52fTJFnegnUzMU6VF/edit?usp=sharing&ouid=108695109185601320347&rtpof=true&sd=true" },
-            { id: 104, name: "Nuryati", gender: "female", role: "Perpustakaan", linkDrive1: "https://drive.google.com/file/d/1KOrHnx5tGkMkINe_u_D-Hji3zOIWtQkP/view?usp=sharing", linkDrive2: "https://docs.google.com/spreadsheets/d/1hqy4w_aqYK3N2m2SyznOtKZJgsdV_kkJ/edit?usp=sharing&ouid=108695109185601320347&rtpof=true&sd=true" },
-            { id: 105, name: "Saefulloh", gender: "male", role: "Kebersihan", linkDrive1: "https://drive.google.com/file/d/1Z4N3BfUfJRJSLgRJmSSz5XOwnpv8O539/view?usp=sharing", linkDrive2: "https://docs.google.com/spreadsheets/d/1thsfx0881MkEX6WBrXrFYDFQ2OkT2i9B/edit?usp=sharing&ouid=108695109185601320347&rtpof=true&sd=true" }
-        ];
-
-        const islamicQuotes = [
-            { text: "Ilmu itu lebih baik daripada harta. Ilmu menjaga engkau dan engkau menjaga harta.", author: "Ali bin Abi Thalib" },
-            { text: "Bila engkau ingin doa-doamu dikabulkan saat kesulitan, maka perbanyaklah doa di saat lapang.", author: "Abu Bakar Ash-Shiddiq" },
-            { text: "Barangsiapa yang tidak menyayangi, niscaya ia tidak akan disayangi.", author: "Umar bin Khattab" },
-            { text: "Kesabaran itu ada dua macam: sabar atas sesuatu yang tidak kau ingin dan sabar menahan diri dari sesuatu yang kau ingini.", author: "Ali bin Abi Thalib" },
-            { text: "Hiduplah sesukamu maka sesungguhnya kamu akan mati. Cintailah siapa saja yang kamu kehendaki maka sesungguhnya kamu akan berpisah dengannya.", author: "Imam Al-Ghazali" },
-            { text: "Ilmu tanpa amal adalah kegilaan, dan amal tanpa ilmu adalah kesia-siaan.", author: "Imam Al-Ghazali" },
-            { text: "Jagalah lisanmu, jangan biarkan ia menyebut kekurangan orang lain, sebab engkau pun punya kekurangan dan orang lain pun punya lisan.", author: "Imam Syafi'i" },
-            { text: "Kecantikan itu bukan dengan pakaian yang menghiasi kita, tapi kecantikan itu adalah kecantikan ilmu dan adab.", author: "Ali bin Abi Thalib" }
+            { id: 101, name: "Ahmad Mutasir", gender: "male", role: "Kepala Sekolah", linkDrive1: "https://drive.google.com/file/d/11aP7q_BI5L-xyMHKwMQHzpMbRDy8DJtn/view?usp=sharing", linkDrive2: "https://drive.google.com/file/d/1BuhrQJyDPgM7bbl2dIDoQhZQP45FF6RO/view?usp=sharing", image: "https://i.ibb.co.com/0VqfKyvw/ahmad.png" },
+            { id: 102, name: "Akmal Khoirul Riyadi", gender: "male", role: "Administrasi", linkDrive1: "https://drive.google.com/file/d/1H30tvcobMM76uktXwMKM2ucaehcAKs-3/view?usp=sharing", linkDrive2: "https://drive.google.com/file/d/1BuhrQJyDPgM7bbl2dIDoQhZQP45FF6RO/view?usp=sharing", image: "https://i.ibb.co.com/WN6RdXKs/AKMAL1.jpg" },
+            { id: 103, name: "Deka Ponco Saputro", gender: "male", role: "Administrasi", linkDrive1: "https://drive.google.com/file/d/1GigZRZJUH4Lrt0UlIEewQdNFDqHfLKZl/view?usp=sharing", linkDrive2: "https://drive.google.com/file/d/1BuhrQJyDPgM7bbl2dIDoQhZQP45FF6RO/view?usp=sharing", image: "https://i.ibb.co.com/BVpD8wj0/man-avatar.png" },
+            { id: 104, name: "Fadliyah", gender: "female", role: "Bendahara", linkDrive1: "https://drive.google.com/file/d/1dcbXpkIOGp_V4CSsleZvDsyaS9N9o8Vj/view?usp=sharing", linkDrive2: "https://drive.google.com/file/d/1BuhrQJyDPgM7bbl2dIDoQhZQP45FF6RO/view?usp=sharing", image: "https://i.ibb.co.com/BVpD8wj0/man-avatar.png" },
+            { id: 105, name: "Nuryati", gender: "female", role: "Perpustakaan", linkDrive1: "https://drive.google.com/file/d/1OpcKrTpMt_-DMgogfhCQCMwkdbn52JzP/view?usp=sharing", linkDrive2: "https://drive.google.com/file/d/1BuhrQJyDPgM7bbl2dIDoQhZQP45FF6RO/view?usp=sharing", image: "https://i.ibb.co.com/V0FN68ts/nuryati.jpg" },
+            { id: 106, name: "Saefulloh", gender: "male", role: "Kebersihan", linkDrive1: "https://drive.google.com/file/d/1tHZ3xAarvwdjuDDpN4b3nIeulznvdmfj/view?usp=sharing", linkDrive2: "https://drive.google.com/file/d/1BuhrQJyDPgM7bbl2dIDoQhZQP45FF6RO/view?usp=sharing", image: "https://i.ibb.co.com/Q7FJ9TYC/eful.jpg"  },
+            { id: 107, name: "Suyeni", gender: "male", role: "Kebersihan", linkDrive1: "https://drive.google.com/file/d/1eMaqTraECvouWoz4I5QaX5hyqQyuQWP0/view?usp=sharing", linkDrive2: "https://drive.google.com/file/d/1BuhrQJyDPgM7bbl2dIDoQhZQP45FF6RO/view?usp=sharing", image: "https://i.ibb.co.com/67Snv5km/YENI1.jpg"  }
         ];
 
         let selectedRoleType = '';
@@ -226,16 +247,6 @@
         const nameDropdown = document.getElementById('name-dropdown');
         const personGrid = document.getElementById('person-grid');
         const emptyState = document.getElementById('empty-state');
-
-        function updateQuote() {
-            const quoteElement = document.getElementById('quote-text');
-            const authorElement = document.getElementById('quote-author');
-            const randomIndex = Math.floor(Math.random() * islamicQuotes.length);
-            const quote = islamicQuotes[randomIndex];
-            
-            quoteElement.innerText = `"${quote.text}"`;
-            authorElement.innerText = `— ${quote.author}`;
-        }
 
         function selectRole(role) {
             selectedRoleType = role;
@@ -257,7 +268,7 @@
             } else {
                 iconContainer.className = "w-16 h-16 bg-rose-600 rounded-2xl flex items-center justify-center text-white shadow-xl mb-4 transform -rotate-3 transition-colors";
                 icon.setAttribute('data-lucide', 'briefcase');
-                title.innerText = "Login Staf";
+                title.innerText = "Login Tendik";
             }
             lucide.createIcons();
         }
@@ -265,7 +276,6 @@
         function backToRoles() {
             loginScreen.classList.add('hidden');
             roleScreen.classList.remove('hidden');
-            updateQuote();
         }
 
         loginForm.onsubmit = (e) => {
@@ -296,7 +306,6 @@
             roleScreen.classList.remove('hidden');
             document.getElementById('password').value = '';
             document.getElementById('login-error').classList.add('hidden');
-            updateQuote();
         }
 
         function switchTab(tab) {
@@ -329,16 +338,20 @@
                 personGrid.innerHTML = filtered.map(person => {
                     const isMale = person.gender === 'male';
                     const themeColor = isMale ? 'indigo' : 'rose';
+                    const profileContent = person.image 
+                        ? `<img src="${person.image}" alt="${person.name}" class="w-full h-full object-cover">`
+                        : `<i data-lucide="${isMale ? 'user' : 'user-round'}" class="w-8 h-8 text-slate-300"></i>`;
+
                     return `
                         <div onclick="openModal(${person.id}, '${activeTab}')" class="group cursor-pointer animate-zoom-in">
                             <div class="relative bg-white/60 hover:bg-white rounded-[2rem] p-5 transition-all duration-500 hover:-translate-y-2 shadow-sm hover:shadow-2xl hover:shadow-indigo-100 border border-white flex flex-col items-center">
-                                <div class="w-16 h-16 rounded-2xl p-0.5 bg-gradient-to-br from-${themeColor}-600 to-${themeColor}-400 mb-3 transition-transform group-hover:rotate-3">
+                                <div class="w-16 h-16 rounded-2xl p-0.5 bg-gradient-to-br from-${themeColor}-600 to-${themeColor}-400 mb-3 transition-transform group-hover:rotate-3 overflow-hidden shadow-inner">
                                     <div class="w-full h-full bg-white rounded-[0.9rem] overflow-hidden flex items-center justify-center">
-                                        <i data-lucide="${isMale ? 'user' : 'user-round'}" class="w-8 h-8 text-slate-300"></i>
+                                        ${profileContent}
                                     </div>
                                 </div>
                                 <h3 class="text-[13px] font-black text-slate-800 text-center leading-tight mb-1 group-hover:text-indigo-600">${person.name}</h3>
-                                <p class="text-[8px] font-bold text-slate-400 uppercase tracking-widest">${person.role}</p>
+                                <p class="text-[8px] font-bold text-slate-400 tracking-widest">${person.role}</p>
                             </div>
                         </div>
                     `;
@@ -353,22 +366,26 @@
             const isMale = person.gender === 'male';
             const themeColor = isMale ? 'indigo' : 'rose';
 
+            const profileContent = person.image 
+                ? `<img src="${person.image}" alt="${person.name}" class="w-full h-full object-cover">`
+                : `<i data-lucide="${isMale ? 'user' : 'user-round'}" class="w-8 h-8 text-${themeColor}-300"></i>`;
+
             document.getElementById('modal-content').innerHTML = `
                 <div class="relative">
                     <div class="h-14 bg-gradient-to-r from-${themeColor}-600 to-${themeColor}-500"></div>
-                    <button onclick="closeModalAndExit()" class="absolute top-2.5 right-2.5 p-1.5 bg-black/10 hover:bg-black/20 text-white rounded-full transition-all">
+                    <button onclick="closeModal()" class="absolute top-2.5 right-2.5 p-1.5 bg-black/10 hover:bg-black/20 text-white rounded-full transition-all">
                         <i data-lucide="x" class="w-3 h-3"></i>
                     </button>
                     
                     <div class="px-5 pb-6 -mt-7 text-center relative z-10">
                         <div class="w-16 h-16 rounded-[1.5rem] p-0.5 bg-white shadow-lg mb-3 mx-auto">
-                            <div class="w-full h-full bg-${themeColor}-50 rounded-[1.3rem] flex items-center justify-center">
-                                <i data-lucide="${isMale ? 'user' : 'user-round'}" class="w-8 h-8 text-${themeColor}-300"></i>
+                            <div class="w-full h-full bg-${themeColor}-50 rounded-[1.3rem] flex items-center justify-center overflow-hidden">
+                                ${profileContent}
                             </div>
                         </div>
                         
                         <h2 class="text-base font-black text-slate-900 leading-tight">${person.name}</h2>
-                        <p class="text-[8px] font-black uppercase tracking-widest text-${themeColor}-500 mt-1">${person.role}</p>
+                        <p class="text-[8px] font-black tracking-widest text-${themeColor}-500 mt-1">${person.role}</p>
                         
                         <div class="mt-6 space-y-2">
                             <a href="${person.linkDrive1}" target="_blank" class="flex items-center gap-3 p-3 bg-slate-50 hover:bg-white border border-slate-100 rounded-[1.2rem] transition-all group hover:shadow-md">
@@ -376,7 +393,7 @@
                                     <i data-lucide="file-text" size="14"></i>
                                 </div>
                                 <div class="text-left">
-                                    <p class="text-[9px] font-black uppercase tracking-wider text-slate-800">Biodata</p>
+                                    <p class="text-[9px] font-black tracking-wider text-slate-800">Biodata</p>
                                     <p class="text-[7px] font-medium text-slate-400 leading-none mt-0.5">Lihat data personil</p>
                                 </div>
                             </a>
@@ -385,7 +402,7 @@
                                     <i data-lucide="archive" size="14"></i>
                                 </div>
                                 <div class="text-left">
-                                    <p class="text-[9px] font-black uppercase tracking-wider text-slate-800">Arsip</p>
+                                    <p class="text-[9px] font-black tracking-wider text-slate-800">Arsip</p>
                                     <p class="text-[7px] font-medium text-slate-400 leading-none mt-0.5">Unduh berkas digital</p>
                                 </div>
                             </a>
@@ -401,15 +418,18 @@
             lucide.createIcons();
         }
 
-        function closeModalAndExit() {
+        // Fungsi hanya menutup modal
+        function closeModal() {
             document.getElementById('modal-container').classList.add('hidden');
+        }
+
+        // Fungsi menutup modal dan logout (untuk tombol Tutup)
+        function closeModalAndExit() {
+            closeModal();
             logout(); 
         }
 
-        window.onload = () => {
-            lucide.createIcons();
-            updateQuote();
-        };
+        window.onload = () => lucide.createIcons();
     </script>
 </body>
 </html>
