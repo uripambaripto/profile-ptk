@@ -37,7 +37,6 @@
         .animate-zoom-in { animation: zoom-in 0.3s cubic-bezier(0.16, 1, 0.3, 1) both; }
         .animate-fade-in { animation: fade-in 0.5s ease-out both; }
         
-        /* Animasi Melayang */
         .floating-art {
             animation: float 4s ease-in-out infinite;
             filter: drop-shadow(0 20px 30px rgba(0,0,0,0.1));
@@ -63,7 +62,7 @@
 </head>
 <body class="min-h-screen text-slate-900 overflow-x-hidden">
 
-    <!-- Global Floating Image (z-index diset ke 150 agar di depan modal) -->
+    <!-- Global Floating Image -->
     <div class="fixed bottom-4 right-4 md:bottom-10 md:right-10 z-[150] pointer-events-none select-none w-32 md:w-56 lg:w-72 animate-fade-in">
         <img src="https://i.ibb.co.com/Y7TK3n2L/imageedit-1-5692967174.png" alt="Mascot Art" class="floating-art w-full h-auto">
     </div>
@@ -74,7 +73,6 @@
             <div class="absolute top-[-10%] right-[-10%] w-96 h-96 bg-indigo-100/50 rounded-full blur-3xl"></div>
             <div class="w-full max-w-[800px] relative z-10 text-center">
                 <div class="mb-10 animate-fade-in">
-                    <!-- Logo Dipo -->
                     <div class="w-32 h-32 md:w-40 md:h-40 bg-white rounded-3xl flex items-center justify-center shadow-2xl mx-auto mb-6 overflow-hidden p-3 border border-slate-50">
                         <img src="https://i.ibb.co.com/x8PgpBdZ/logo-dipo.jpg" alt="logo dipo" class="w-full h-full object-contain">
                     </div>
@@ -85,7 +83,6 @@
                     <p class="text-slate-500 font-bold text-[10px] md:text-xs mt-4 uppercase tracking-[0.2em]">Silahkan Pilih Peranan Anda</p>
                 </div>
 
-                <!-- Container Utama Grid -->
                 <div class="flex flex-col gap-4 md:gap-6 animate-zoom-in">
                     <div class="grid grid-cols-2 gap-4 md:gap-6">
                         <button onclick="selectRole('pendidik')" class="role-card group bg-white p-6 md:p-8 rounded-[2rem] md:rounded-[2.5rem] border border-slate-100 flex flex-col items-center text-center">
@@ -105,7 +102,7 @@
                         </button>
                     </div>
 
-                    <a href="https://docs.google.com/spreadsheets/d/1guhbz8udaOeCOnGb4uil8spMJxZnjMWB9z-39-FAd0A/edit?usp=sharing" target="_blank" class="role-card group bg-white p-6 md:p-8 rounded-[2rem] md:rounded-[2.5rem] border border-slate-100 flex flex-row items-center justify-center gap-6 text-left cursor-pointer">
+                    <a href="https://docs.google.com/spreadsheets/d/1ukPk8KsOQkUZuytvawgTjk9ALKoSHp7Y/edit?usp=sharing&ouid=108695109185601320347&rtpof=true&sd=true" target="_blank" class="role-card group bg-white p-6 md:p-8 rounded-[2rem] md:rounded-[2.5rem] border border-slate-100 flex flex-row items-center justify-center gap-6 text-left cursor-pointer">
                         <div class="w-14 h-14 md:w-16 md:h-16 bg-emerald-50 rounded-2xl md:rounded-3xl flex items-center justify-center text-emerald-600 group-hover:bg-emerald-600 group-hover:text-white transition-colors duration-300 shrink-0">
                             <i data-lucide="book-open" class="w-8 h-8 md:w-9 md:h-9"></i>
                         </div>
@@ -196,9 +193,10 @@
             </main>
         </div>
 
-        <!-- Detail Modal Pop-up (z-index modal adalah 100) -->
+        <!-- Detail Modal Pop-up -->
         <div id="modal-container" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4">
-            <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="closeModal()"></div>
+            <!-- Background modal -->
+            <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"></div>
             <div id="modal-content" class="relative bg-white w-full max-w-[300px] rounded-[2rem] overflow-hidden shadow-2xl border border-white animate-zoom-in"></div>
         </div>
     </div>
@@ -373,7 +371,9 @@
             document.getElementById('modal-content').innerHTML = `
                 <div class="relative">
                     <div class="h-14 bg-gradient-to-r from-${themeColor}-600 to-${themeColor}-500"></div>
-                    <button onclick="closeModal()" class="absolute top-2.5 right-2.5 p-1.5 bg-black/10 hover:bg-black/20 text-white rounded-full transition-all">
+                    
+                    <!-- Tombol Silang (X): Kembali ke Pilih Peran -->
+                    <button onclick="backToRolesFromModal()" class="absolute top-2.5 right-2.5 p-1.5 bg-black/10 hover:bg-black/20 text-white rounded-full transition-all">
                         <i data-lucide="x" class="w-3 h-3"></i>
                     </button>
                     
@@ -393,7 +393,7 @@
                                     <i data-lucide="file-text" size="14"></i>
                                 </div>
                                 <div class="text-left">
-                                    <p class="text-[9px] font-black tracking-wider text-slate-800">Biodata</p>
+                                    <p class="text-[9px] font-black uppercase tracking-wider text-slate-800">Biodata</p>
                                     <p class="text-[7px] font-medium text-slate-400 leading-none mt-0.5">Lihat data personil</p>
                                 </div>
                             </a>
@@ -402,13 +402,14 @@
                                     <i data-lucide="archive" size="14"></i>
                                 </div>
                                 <div class="text-left">
-                                    <p class="text-[9px] font-black tracking-wider text-slate-800">Arsip</p>
+                                    <p class="text-[9px] font-black uppercase tracking-wider text-slate-800">Arsip</p>
                                     <p class="text-[7px] font-medium text-slate-400 leading-none mt-0.5">Unduh berkas digital</p>
                                 </div>
                             </a>
                         </div>
 
-                        <button onclick="closeModalAndExit()" class="w-full mt-6 py-2.5 bg-slate-900 text-white rounded-xl font-black text-[9px] uppercase tracking-widest hover:bg-black transition-all flex items-center justify-center gap-2">
+                        <!-- Tombol Tutup: Tetap di Dashboard -->
+                        <button onclick="closeModalOnly()" class="w-full mt-6 py-2.5 bg-slate-900 text-white rounded-xl font-black text-[9px] uppercase tracking-widest hover:bg-black transition-all flex items-center justify-center gap-2">
                             Tutup <i data-lucide="arrow-left" size="12"></i>
                         </button>
                     </div>
@@ -418,15 +419,17 @@
             lucide.createIcons();
         }
 
-        // Fungsi hanya menutup modal
-        function closeModal() {
+        // Fungsi Tombol X: Sembunyikan Modal, Sembunyikan Dashboard, Tampilkan Pilih Peran
+        function backToRolesFromModal() {
             document.getElementById('modal-container').classList.add('hidden');
+            mainDashboard.classList.add('hidden');
+            roleScreen.classList.remove('hidden');
+            document.getElementById('password').value = '';
         }
 
-        // Fungsi menutup modal dan logout (untuk tombol Tutup)
-        function closeModalAndExit() {
-            closeModal();
-            logout(); 
+        // Fungsi Tombol Tutup: Hanya menyembunyikan modal
+        function closeModalOnly() {
+            document.getElementById('modal-container').classList.add('hidden');
         }
 
         window.onload = () => lucide.createIcons();
